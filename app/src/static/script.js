@@ -18,10 +18,11 @@ $(function() {
 		});
 	});
 	
-	Materialize.toast('Click Location button in navbar to auto-locate!', 4000) // 4000 is the duration of the toast
 });
 
 function init_materialize_fns(){
+	Materialize.toast('Click Location button in navbar to auto-locate!', 4000) // 4000 is the duration of the toast
+	
 	$('.tooltipped').tooltip({delay: 50});
 
  	$('.card').hover(
