@@ -1,10 +1,36 @@
 var express = require('express');
 var app = express();
+var request = require('request');
+var path = require('path');
 
-//your routes here
+
+// Homepage routes
 app.get('/', function (req, res) {
-    res.send("Hello World!");
+	res.sendFile(path.join(__dirname, '/static', 'homepage.html'));
 });
+
+app.get('/homepage', function (req, res) {
+	res.redirect('/');
+});
+
+app.get('/homepage.html', function (req, res) {
+	res.redirect('/');
+});
+
+
+
+// Validate page routes
+app.get('/validate', function (req, res) {
+	res.sendFile(path.join(__dirname, '/static', 'validate.html'));
+});
+
+app.get('/validate.html', function (req, res) {
+	res.redirect('/validate');
+});
+
+
+
+app.use(express.static('static'))
 
 app.listen(8080, function () {
   console.log('Example app listening on port 8080!');
