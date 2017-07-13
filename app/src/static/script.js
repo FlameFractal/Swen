@@ -12,21 +12,26 @@ $(function() {
 	hasura_init();
 	fetch_homepage_articles(function(){
 		homepage_template_headers(function(){
-			homepage_template_articles();
+			homepage_template_articles(function(){
+				init_materialize_fns();
+			});
 		});
 	});
-	enable_card_hover();
+	
+	Materialize.toast('Click Location button in navbar to auto-locate!', 4000) // 4000 is the duration of the toast
 });
 
-function enable_card_hover(){
-	$(document).on({
-	    mouseenter: function () {
-	        $(this).find('> .card-image > img.activator').click();
-	    },
-	    mouseleave: function () {
-	        $(this).find('> .card-reveal > .card-title').click();
-	    }
-	}, ".card");
+function init_materialize_fns(){
+	$('.tooltipped').tooltip({delay: 50});
+
+ 	$('.card').hover(
+        function() {
+            $(this).find('> .card-image > img.activator').click();
+        }, function() {
+            $(this).find('> .card-reveal > .card-title').click();
+        }
+    );
+
 }
 
 function hasura_init() {
@@ -34,7 +39,7 @@ function hasura_init() {
     hasura.disableHttps(); // No HTTPS enabled on local-development
 }
 
-function fetch_homepage_articles(callback) {
+function fetch_homepage_articles(callback, callback2) {
 	articles = '';
     hasura.data.query({
         type: 'select',
@@ -49,7 +54,7 @@ function fetch_homepage_articles(callback) {
             },
             "order_by": "-created_on",
         }
-    }, (data) => {articles=data; callback();}, (error) => { console.log(error) });
+    }, (data) => {articles=data; callback(callback2);}, (error) => { console.log(error) });
 }
 
 function homepage_template() {	
@@ -67,8 +72,8 @@ function homepage_template_headers(callback){
 	        <nav>
 	            <div class="nav-wrapper grey darken-3">
 	                <ul id="nav-mobile" class="right hide-on-small-only">
-	                    <li><a class="btn waves-effect blue pulse" onClick="relocate(); return false;" href="#"><span id="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
-	                    <li><a class="btn waves-effect blue active" href="#">Validate<i class="material-icons right">done</i></a></li>
+	                    <li><a class="btn waves-effect blue tooltipped" data-position="bottom" data-delay="50" data-tooltip="Click me to get GPS Location!" onClick="relocate(); return false;" href="#"><span id="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
+	                    <li><a class="btn waves-effect blue" href="#">Validate<i class="material-icons right">done</i></a></li>
 	                    <li><a class="btn waves-effect blue" href="#">Post<i class="material-icons right">mode_edit</i></a></li>
 	                </ul>
 	            </div>
@@ -107,7 +112,7 @@ function homepage_template_headers(callback){
 	callback();
 }
 
-function homepage_template_articles(){
+function homepage_template_articles(callback){
     // Append articles
 	
     $('#news').empty();
@@ -144,13 +149,14 @@ function homepage_template_articles(){
 		        </div>
 		    </div>`)
     }
+    callback();
 }
 
 function reload_homepage(){
 	$('#gpsLocation')[0].innerHTML = gpsLocation;
 	$('#news').hide();
 	$('#preloader2').show();
-	fetch_homepage_articles(homepage_template_articles);
+	fetch_homepage_articles(homepage_template_articles, init_materialize_fns);
 	$('#preloader2').hide();
 	$('#news').show();
 }
@@ -173,11 +179,12 @@ function relocate(){
 		                if (data.results[0].address_components[j].types[k] === 'sublocality_level_1') {
 		                    gpsLocation = data.results[0].address_components[j].long_name;
 							reload_homepage();
+							if (!(gpsLocation=="Tatooine"))
+								Materialize.toast('Location updated to '+gpsLocation+'!', 4000) // 4000 is the duration of the toast
 		                }
 		            }
 		        }
 			});
 		});
 	}
-
 }
