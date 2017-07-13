@@ -67,7 +67,7 @@ function homepage_template_headers(callback){
 	        <nav>
 	            <div class="nav-wrapper grey darken-3">
 	                <ul id="nav-mobile" class="right hide-on-small-only">
-	                    <li><a class="btn waves-effect blue" onClick="relocate(); return false;" href="#"><span id="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
+	                    <li><a class="btn waves-effect blue pulse" onClick="relocate(); return false;" href="#"><span id="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
 	                    <li><a class="btn waves-effect blue active" href="#">Validate<i class="material-icons right">done</i></a></li>
 	                    <li><a class="btn waves-effect blue" href="#">Post<i class="material-icons right">mode_edit</i></a></li>
 	                </ul>
