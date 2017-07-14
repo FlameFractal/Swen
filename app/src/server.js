@@ -4,7 +4,7 @@ var request = require('request');
 var path = require('path');
 
 
-// Homepage routes
+/**** Homepage routes *******/
 app.get('/', function (req, res) {
 	res.sendFile(path.join(__dirname, '/static', 'homepage.html'));
 });
@@ -19,7 +19,7 @@ app.get('/homepage.html', function (req, res) {
 
 
 
-// Validate page routes
+/**** Validate page routes *******/
 app.get('/validate', function (req, res) {
 	res.sendFile(path.join(__dirname, '/static', 'validate.html'));
 });
@@ -28,6 +28,21 @@ app.get('/validate.html', function (req, res) {
 	res.redirect('/validate');
 });
 
+
+/**** Post routes *******/
+app.get('/post', function (req, res) {
+	res.sendFile(path.join(__dirname, '/static', 'post.html'));
+});
+
+app.get('/post.html', function (req, res) {
+	res.redirect('/post');
+});
+
+
+/**** Favicon route *******/
+app.get('/favicon.ico', function (req, res) {
+	res.sendFile(path.join(__dirname, '/static', 'favicon.ico'));
+});
 
 
 app.use(express.static('static'))

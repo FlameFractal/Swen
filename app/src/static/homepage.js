@@ -5,8 +5,8 @@ TODO:
 */ 
 
 
-var articles; // Global articles variable
-var gpsLocation = "Tatooine";
+var valid_articles; // Global articles variable
+var gpsLocation;
 
 $(function() {
 	hasura_init();
@@ -17,12 +17,36 @@ $(function() {
 			});
 		});
 	});
-	
+
+	if (localStorage.getItem("gpsLocationStored") == null){
+		gpsLocation = "Tatooine";
+		localStorage.setItem("gpsLocationStored", gpsLocation);
+	} else {
+		gpsLocation = localStorage.getItem("gpsLocationStored");
+	}
+
+	// window.addEventListener('storage', function(e) {  
+	//   gpsLocation = e.newValue;
+	//   console.log(e);
+	//   reload_homepage();
+	// });
+
+	var intervalID = window.setInterval(checkGpsStorage, 1000);
+	function checkGpsStorage() {
+	  if (localStorage.getItem("gpsLocationStored")!=gpsLocation) {
+	  	gpsLocation = localStorage.getItem("gpsLocationStored");
+	  	reload_homepage();
+	  }
+	}
+
+
 });
 
+
 function init_materialize_fns(){
-	Materialize.toast('Click Location button in navbar to auto-locate!', 4000) // 4000 is the duration of the toast
 	
+    $(".button-collapse").sideNav();
+
 	$('.tooltipped').tooltip({delay: 50});
 
  	$('.card').hover(
@@ -41,7 +65,7 @@ function hasura_init() {
 }
 
 function fetch_homepage_articles(callback, callback2) {
-	articles = '';
+	valid_articles = '';
     hasura.data.query({
         type: 'select',
         args: {
@@ -55,10 +79,7 @@ function fetch_homepage_articles(callback, callback2) {
             },
             "order_by": "-created_on",
         }
-    }, (data) => {articles=data; callback(callback2);}, (error) => { console.log(error) });
-}
-
-function homepage_template() {	
+    }, (data) => {valid_articles=data; callback(callback2);}, (error) => { console.log(error) });
 }
 
 function homepage_template_headers(callback){
@@ -66,16 +87,23 @@ function homepage_template_headers(callback){
     // Append navbar and logo
 
     $('#preloader').hide()
+	Materialize.toast('Click Location button in navbar to auto-locate!', 3000)
 
     $('body').append(`
 
+        <ul id="mobile-demo" class="side-nav">
+            <li><a class="btn waves-effect blue tooltipped" data-position="bottom" data-delay="50" data-tooltip="Click me to get GPS Location!" onClick="relocate(); return false;" href="#"><span id="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
+            <li><a class="btn waves-effect blue" href="validate">Validate<i class="material-icons right">done</i></a></li>
+            <li><a class="btn waves-effect blue" href="/post">Post<i class="material-icons right">mode_edit</i></a></li>
+        </ul>
 		<div class="navbar-fixed">
 	        <nav>
 	            <div class="nav-wrapper grey darken-3">
-	                <ul id="nav-mobile" class="right hide-on-small-only">
+	                <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+	                <ul id="nav-mobile" class="right hide-on-med-and-down">
 	                    <li><a class="btn waves-effect blue tooltipped" data-position="bottom" data-delay="50" data-tooltip="Click me to get GPS Location!" onClick="relocate(); return false;" href="#"><span id="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
-	                    <li><a class="btn waves-effect blue" href="#">Validate<i class="material-icons right">done</i></a></li>
-	                    <li><a class="btn waves-effect blue" href="#">Post<i class="material-icons right">mode_edit</i></a></li>
+	                    <li><a class="btn waves-effect blue" href="validate">Validate<i class="material-icons right">done</i></a></li>
+	                    <li><a class="btn waves-effect blue" href="/post">Post<i class="material-icons right">mode_edit</i></a></li>
 	                </ul>
 	            </div>
 	        </nav>
@@ -118,19 +146,19 @@ function homepage_template_articles(callback){
 	
     $('#news').empty();
  	
- 	if (articles.length > 6) {
+ 	if (valid_articles.length > 6) {
  		len = 6;
  	} else {
- 		len = articles.length
+ 		len = valid_articles.length
  	}
 
     for (var i = 0; i < len; i++) {
 
     	// Reformat date in dd mon yy format
     	var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec");
-    	articles[i].created_on = articles[i].created_on+'T00:00:00+05:30'
-    	articles[i].created_on = new Date(articles[i].created_on);
-    	articles[i].created_on =  articles[i].created_on.getDate() +' '+ m_names[articles[i].created_on.getMonth()] +', '+  articles[i].created_on.getFullYear();
+    	valid_articles[i].created_on = valid_articles[i].created_on+'T00:00:00+05:30'
+    	valid_articles[i].created_on = new Date(valid_articles[i].created_on);
+    	valid_articles[i].created_on =  valid_articles[i].created_on.getDate() +' '+ m_names[valid_articles[i].created_on.getMonth()] +', '+  valid_articles[i].created_on.getFullYear();
 
         $('#news').append(`    
 			<div class="col s4 m4 cards-container">
@@ -139,13 +167,13 @@ function homepage_template_articles(callback){
 		                <img class="activator" src="grey-wallpaper.jpg"> <!--http://lorempixel.com/1000/500/nature/-->
 		            </div>
 		            <div class="card-content">
-		                <span class="card-title activator grey-text text-darken-4">` + articles[i].headline + `<i class="material-icons right">more_vert</i></span>
-		                <p><strong>` + articles[i].created_on + `</strong></p>
+		                <span class="card-title activator grey-text text-darken-4">` + valid_articles[i].headline + `<i class="material-icons right">more_vert</i></span>
+		                <p><strong>` + valid_articles[i].created_on + `</strong></p>
 		            </div>
 		            <div class="card-reveal">
-		                <span class="card-title grey-text text-darken-4"> <i class="material-icons right">close</i>` + articles[i].headline + `</span>
-		                <p><strong>` + articles[i].created_on + `</strong></p>
-		                <p>` + articles[i].content + `</p>
+		                <span class="card-title grey-text text-darken-4"> <i class="material-icons right">close</i>` + valid_articles[i].headline + `</span>
+		                <p><strong>` + valid_articles[i].created_on + `</strong></p>
+		                <p>` + valid_articles[i].content + `</p>
 		            </div>
 		        </div>
 		    </div>`)
@@ -179,9 +207,10 @@ function relocate(){
 		            for (var k = 0; k < data.results[0].address_components[j].types.length; k++) {
 		                if (data.results[0].address_components[j].types[k] === 'sublocality_level_1') {
 		                    gpsLocation = data.results[0].address_components[j].long_name;
+		                    localStorage.setItem("gpsLocationStored", gpsLocation);
 							reload_homepage();
 							if (!(gpsLocation=="Tatooine"))
-								Materialize.toast('Location updated to '+gpsLocation+'!', 4000) // 4000 is the duration of the toast
+								Materialize.toast('Location updated to '+gpsLocation+'!', 3000)
 		                }
 		            }
 		        }
