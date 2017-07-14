@@ -102,7 +102,7 @@ function validate_template_headers(callback){
     $('body').append(`
 		
 		<ul id="mobile-demo" class="side-nav">
-            <li><a class="btn waves-effect blue tooltipped" data-position="bottom" data-delay="50" data-tooltip="Click me to get GPS Location!" onClick="relocate(); return false;" href="#"><span id="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
+            <li><a class="btn waves-effect blue tooltipped" data-position="bottom" data-delay="50" data-tooltip="Click me to get GPS Location!" onClick="relocate(); return false;" href="#"><span class="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
             <li><a class="btn waves-effect amber" href="/validate">Validate<i class="material-icons right">done</i></a></li>
             <li><a class="btn waves-effect blue" href="/post">Post<i class="material-icons right">mode_edit</i></a></li>
         </ul>
@@ -113,7 +113,7 @@ function validate_template_headers(callback){
 	            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons right">menu</i></a>
 	            <a href="/" class="brand-logo amber black-text" style="padding: 0px 10px; font-family: 'Nothing You Could Do', cursive; font-weight: bold">The Daily Post</a>
 	                <ul id="nav-mobile" class="right hide-on-med-and-down	">
-	                    <li><a class="btn waves-effect blue tooltipped" data-position="bottom" data-delay="50" data-tooltip="Click me to get GPS Location!" onClick="relocate(); return false;" href="#"><span id="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
+	                    <li><a class="btn waves-effect blue tooltipped" data-position="bottom" data-delay="50" data-tooltip="Click me to get GPS Location!" onClick="relocate(); return false;" href="#"><span class="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
 	                    <li><a class="btn waves-effect amber" href="/validate">Validate<i class="material-icons right">done</i></a></li>
 	                    <li><a class="btn waves-effect blue" href="/post">Post<i class="material-icons right">mode_edit</i></a></li>
 	                </ul>
@@ -200,7 +200,7 @@ function validate_template_articles(callback){
 }
 
 function reload_validate(){
-	$('#gpsLocation')[0].innerHTML = gpsLocation;
+	$('.gpsLocation').text(gpsLocation);
 	$('#news').hide();
 	$('#preloader2').show();
 	fetch_invalid_articles(validate_template_articles, init_materialize_fns);

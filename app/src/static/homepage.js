@@ -5,7 +5,7 @@ TODO:
 */ 
 
 
-var valid_articles; // Global articles variable
+var valid_articles=''; // Global articles variable
 var gpsLocation;
 
 $(function() {
@@ -33,6 +33,7 @@ $(function() {
 
 	var intervalID = window.setInterval(checkGpsStorage, 1000);
 	function checkGpsStorage() {
+		console.log()
 	  if (localStorage.getItem("gpsLocationStored")!=gpsLocation) {
 	  	gpsLocation = localStorage.getItem("gpsLocationStored");
 	  	reload_homepage();
@@ -79,7 +80,7 @@ function fetch_homepage_articles(callback, callback2) {
             },
             "order_by": "-created_on",
         }
-    }, (data) => {valid_articles=data; callback(callback2);}, (error) => { console.log(error) });
+    }, (data) => {valid_articles=data; console.log(data); console.log(valid_articles); callback(callback2);}, (error) => { console.log(error) });
 }
 
 function homepage_template_headers(callback){
@@ -92,7 +93,7 @@ function homepage_template_headers(callback){
     $('body').append(`
 
         <ul id="mobile-demo" class="side-nav">
-            <li><a class="btn waves-effect blue tooltipped" data-position="bottom" data-delay="50" data-tooltip="Click me to get GPS Location!" onClick="relocate(); return false;" href="#"><span id="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
+            <li><a class="btn waves-effect blue tooltipped" data-position="bottom" data-delay="50" data-tooltip="Click me to get GPS Location!" onClick="relocate(); return false;" href="#"><span class="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
             <li><a class="btn waves-effect blue" href="validate">Validate<i class="material-icons right">done</i></a></li>
             <li><a class="btn waves-effect blue" href="/post">Post<i class="material-icons right">mode_edit</i></a></li>
         </ul>
@@ -101,7 +102,7 @@ function homepage_template_headers(callback){
 	            <div class="nav-wrapper grey darken-3">
 	                <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 	                <ul id="nav-mobile" class="right hide-on-med-and-down">
-	                    <li><a class="btn waves-effect blue tooltipped" data-position="bottom" data-delay="50" data-tooltip="Click me to get GPS Location!" onClick="relocate(); return false;" href="#"><span id="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
+	                    <li><a class="btn waves-effect blue tooltipped" data-position="bottom" data-delay="50" data-tooltip="Click me to get GPS Location!" onClick="relocate(); return false;" href="#"><span class="gpsLocation">`+gpsLocation+`</span><i class="material-icons right">location_on</i></a></li>
 	                    <li><a class="btn waves-effect blue" href="validate">Validate<i class="material-icons right">done</i></a></li>
 	                    <li><a class="btn waves-effect blue" href="/post">Post<i class="material-icons right">mode_edit</i></a></li>
 	                </ul>
@@ -182,7 +183,7 @@ function homepage_template_articles(callback){
 }
 
 function reload_homepage(){
-	$('#gpsLocation')[0].innerHTML = gpsLocation;
+	$('.gpsLocation').text(gpsLocation);
 	$('#news').hide();
 	$('#preloader2').show();
 	fetch_homepage_articles(homepage_template_articles, init_materialize_fns);
