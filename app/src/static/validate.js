@@ -3,13 +3,6 @@ var gpsLocation;
 
 $(function() {
 	hasura_init();
-	fetch_invalid_articles(function(){
-		validate_template_headers(function(){
-			validate_template_articles(function(){
-				init_materialize_fns();
-			});
-		});
-	});
 
 	if (localStorage.getItem("gpsLocationStored") == null){
 		gpsLocation = "Tatooine";
@@ -18,6 +11,8 @@ $(function() {
 		gpsLocation = localStorage.getItem("gpsLocationStored");
 	}
 
+	validate_template_headers(reload_validate);
+	
 	// window.addEventListener('storage', function(e) {  
 	//   gpsLocation = e.newValue;
 	//   console.log(e)
@@ -53,12 +48,12 @@ function init_materialize_fns(){
  		var btn = e.target.closest('a')
  		var post_id = btn.classList[3];
     	if(btn.innerHTML.includes("Legit")){
-    		vote("legit", post_id);
+    		vote("+1", post_id);
     		$('.'+post_id).addClass('disabled');
     		Materialize.toast("Marked Legit! Thank you for contributing!",2000)
     	}
     	else if(btn.innerHTML.includes("Fake")){
-    		vote("fake", post_id);
+    		vote("-1", post_id);
     		$('.'+post_id).addClass('disabled');
     		Materialize.toast("Marked Fake! Thank you for contributing!",2000)
     	}
@@ -66,7 +61,12 @@ function init_materialize_fns(){
 }
 
 function vote(type, post_id){
-	console.log(type+' '+post_id);
+	hasura.data.query({
+    	"type": "run_sql",
+    	"args": {
+        	"sql": "UPDATE article SET votes = votes "+type+" WHERE id = "+post_id
+    	}
+	});
 }
 
 function hasura_init() {
@@ -75,7 +75,6 @@ function hasura_init() {
 }
 
 function fetch_invalid_articles(callback, callback2) {
-	invalid_articles = '';
     hasura.data.query({
         type: 'select',
         args: {
@@ -159,12 +158,12 @@ function validate_template_articles(callback){
     // Append articles
 	
     $('#news').empty();
- 	
- 	if (invalid_articles.length > 6) {
- 		len = 6;
- 	} else {
+	// Show only 6 articles , then load on scroll
+ 	// if (invalid_articles.length > 6) {
+ 	// 	len = 6;
+ 	// } else {
  		len = invalid_articles.length
- 	}
+ 	// }
 
     for (var i = 0; i < len; i++) {
 
@@ -220,7 +219,6 @@ function relocate(){
 			url = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&sensor=true";
 
 			$.ajax(url).done(function(data) {
-			    console.log(data);
 		        for (var j = 0; j < data.results[0].address_components.length; j++) {
 		            for (var k = 0; k < data.results[0].address_components[j].types.length; k++) {
 		                if (data.results[0].address_components[j].types[k] === 'sublocality_level_1') {

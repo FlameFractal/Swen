@@ -1,22 +1,9 @@
-/* 
-TODO:
-	Append more articles based on scroll
-	Restructure script.js to seperate Homepage, Validate specific functions.
-*/ 
-
-
 var valid_articles=''; // Global articles variable
 var gpsLocation;
 
 $(function() {
+	
 	hasura_init();
-	fetch_homepage_articles(function(){
-		homepage_template_headers(function(){
-			homepage_template_articles(function(){
-				init_materialize_fns();
-			});
-		});
-	});
 
 	if (localStorage.getItem("gpsLocationStored") == null){
 		gpsLocation = "Tatooine";
@@ -24,6 +11,8 @@ $(function() {
 	} else {
 		gpsLocation = localStorage.getItem("gpsLocationStored");
 	}
+
+	homepage_template_headers(reload_homepage);
 
 	// window.addEventListener('storage', function(e) {  
 	//   gpsLocation = e.newValue;
@@ -146,12 +135,13 @@ function homepage_template_articles(callback){
     // Append articles
 	
     $('#news').empty();
- 	
- 	if (valid_articles.length > 6) {
- 		len = 6;
- 	} else {
+ 	console.log(valid_articles);
+    // Show only 6 articles , then load on scroll
+ 	// if (valid_articles.length > 6) {
+ 	// 	len = 6;
+ 	// } else {
  		len = valid_articles.length
- 	}
+ 	// }
 
     for (var i = 0; i < len; i++) {
 
