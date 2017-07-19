@@ -17,7 +17,7 @@ This is a series of blogposts written as part of an Internship [@Hasura](https:/
 
 
 
-![](http://g.recordit.co/AMxiYIhtha.gif)
+<a href="https://gifyu.com/image/zbys"><img src="https://gifyu.com/images/actual-full.gif" alt="actual-full.gif" border="0" /></a>
 
 
 
