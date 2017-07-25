@@ -100,6 +100,7 @@ function homepage_template_headers(callback){
 	    </div>
 	    <div class="amber valign-wrapper" style="min-height:10vh; width:100vw">
 	        <h1 class="center-block" style="font-family: 'Nothing You Could Do', cursive; font-weight: bold"> The Daily Post</h3>
+	        <h3 class="center-block" style="font-family: 'Nothing You Could Do', cursive; font-weight: bold"> The Daily Post</h3>
 	    </div>
 
         <div id="preloader2" style="display:none; margin-top: 25vh; margin-left: 45vw;">
