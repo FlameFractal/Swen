@@ -216,7 +216,7 @@ function relocate(){
 		navigator.geolocation.getCurrentPosition(function (position){
 			var lat = position.coords.latitude;
 			var lng = position.coords.longitude;
-			url = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&sensor=true";
+			url = "//maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&sensor=true";
 
 			$.ajax(url).done(function(data) {
 		        for (var j = 0; j < data.results[0].address_components.length; j++) {
