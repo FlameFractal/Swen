@@ -152,7 +152,7 @@ function homepage_template_articles(callback){
     	valid_articles[i].created_on =  valid_articles[i].created_on.getDate() +' '+ m_names[valid_articles[i].created_on.getMonth()] +', '+  valid_articles[i].created_on.getFullYear();
 
         $('#news').append(`    
-			<div class="col s4 m4 cards-container">
+			<div class="col s12 m6 l4 cards-container">
 		        <div class="card sticky-action">
 		            <div class="card-image waves-effect waves-block waves-light">
 		                <img class="activator" src="grey-wallpaper.jpg"> <!--http://lorempixel.com/1000/500/nature/-->
