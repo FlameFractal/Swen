@@ -37,7 +37,7 @@ $(function() {
 
 function hasura_init(callback) {
     hasura.setBaseDomain('c100.hasura.me');
-    hasura.disableHttps(); // No HTTPS enabled on local-development
+    // hasura.disableHttps(); // No HTTPS enabled on local-development
     callback();
 }
 

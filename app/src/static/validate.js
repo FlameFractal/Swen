@@ -71,7 +71,7 @@ function vote(type, post_id){
 
 function hasura_init() {
     hasura.setBaseDomain('c100.hasura.me');
-    hasura.disableHttps(); // No HTTPS enabled on local-development
+    // hasura.disableHttps(); // No HTTPS enabled on local-development
 }
 
 function fetch_invalid_articles(callback, callback2) {
