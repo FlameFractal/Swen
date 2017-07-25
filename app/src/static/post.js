@@ -36,7 +36,7 @@ $(function() {
 });
 
 function hasura_init(callback) {
-    hasura.setBaseDomain('c100.hasura.me');
+    hasura.setBaseDomain('contain50.hasura-app.io');
     // hasura.disableHttps(); // No HTTPS enabled on local-development
     callback();
 }
